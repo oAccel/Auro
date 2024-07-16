@@ -3,7 +3,7 @@
 
 # Hasta Studios Launcher
 
-A custom launcher for all Hasta Studios projects.
+A cracked fork of helios launcher.
 
 ![Launcher Screenshot](https://zelthoriaismp.cloud/launcher2.png)
 
@@ -18,18 +18,7 @@ A custom launcher for all Hasta Studios projects.
 - 🔒 Full account management:
   - Add multiple accounts and easily switch between them.
   - Microsoft (OAuth 2.0) and custom authentication server fully supported.
+  - Offline account support (cracked)
   - Credentials are never stored and transmitted directly to Hasta Studios or Microsoft.
 
-## Usage
-
-1. Download the launcher from [here](https://hastastudios.zelthoriaismp.cloud).
-2. Install it on your system.
-3. Run the launcher and enjoy.
-
-## Special thanks
-
-- ikymax 
-- ulysses
-
-Thank you for helping to improve this project!
 

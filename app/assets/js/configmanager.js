@@ -33,23 +33,6 @@ exports.getDataDirectory = function(def = false){
 }
 
 /**
- * Reloads the account name because using a custom authserver 
- * won't do automatically the job, thanks to Ulysse2211
- * 
- */
-async function reloadUsername() {
-    const authAccounts = exports.getSelectedAccount();
-    const acc = authAccounts;
-
-    if (acc && acc.type === 'mojang') {
-        const gg = exports.getSelectedAccount();
-        let response = await fetch(`https://auth.zelthoriaismp.cloud/api/yggdrasil/sessionserver/session/minecraft/profile/${gg['uuid']}`);
-        response = await response.json();
-        exports.addMojangAuthAccount(gg['uuid'], gg['accessToken'], response['name'], response['name']);
-    }
-}
-
-/**
  * Set the new data directory.
  * 
  * @param {string} dataDirectory The new data directory.
@@ -296,6 +279,17 @@ exports.setClientToken = function(clientToken){
     config.clientToken = clientToken
 }
 
+exports.addAuthAccount = function(uuid, accessToken, username, displayName){
+    config.selectedAccount = uuid
+    config.authenticationDatabase[uuid] = {
+        accessToken,
+        username: username.trim(),
+        uuid: uuid.trim(),
+        displayName: displayName.trim()
+    }
+    return config.authenticationDatabase[uuid]
+}
+
 /**
  * Retrieve the ID of the selected serverpack.
  * 
@@ -471,8 +465,6 @@ exports.setSelectedAccount = function(uuid){
     if(authAcc != null) {
         config.selectedAccount = uuid
     }
-    reloadUsername()
-
     return authAcc
 }
 
@@ -859,9 +851,6 @@ exports.setLanguage = function(lang){
     app.quit()
 }
 
-// This exports the reloadUsername function for use in preloader
-
-exports.reloadUsername = reloadUsername
 
 /**
  * Get the list of all available languages

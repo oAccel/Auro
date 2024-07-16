@@ -663,7 +663,6 @@ async function populateAuthAccounts() {
   let microsoftAuthAccountStr = '';
   let mojangAuthAccountStr = '';
 
-    // Array para armazenar todas as promessas
     const promises = [];
 
   authKeys.forEach((val) => {
@@ -672,9 +671,8 @@ async function populateAuthAccounts() {
 promises.push(
             fetchSkinAndConvertToBase64(acc.displayName)
                 .then(result => {
-                    // Use base64Image aqui para construir a URL da imagem
                     const encodedBase64 = encodeURIComponent(result);
-                    const skinURL = `https://visage.surgeplay.com/bust/256/${encodedBase64}`;
+                    const skinURL = 'https://visage.surgeplay.com/bust/256/X-Steve'
                     const skinMSFT = `https://visage.surgeplay.com/bust/256/${acc.uuid}`;
 
                     const accBS = `<div class="settingsAuthAccount" uuid="${acc.uuid}">
@@ -737,10 +735,8 @@ promises.push(
 );
 })
 
-// Aguarde a conclusão de todas as promessas antes de retornar
 await Promise.all(promises);
 
-    // Atualize as contas de autenticação depois de receber todas as imagens
     return { microsoftAuthAccountStr, mojangAuthAccountStr };
 }
 

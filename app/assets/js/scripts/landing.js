@@ -142,61 +142,28 @@ document.getElementById('avatarOverlay').onclick = async e => {
 }
 
 // Bind selected account
-async function fetchSkinAndConvertToBase64(username) {
-  try {
-    const skinURL = `https://auth.zelthoriaismp.cloud/skin/${username}.png`;
-    const response = await fetch(skinURL);
-
-    if (!response.ok) {
-      throw new Error('Error fetching skin image: ' + response.status);
-    }
-
-    const blob = await response.blob();
-
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result.split(',')[1]);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  } catch (error) {
-    return 'MHF_Question';
-  }
-}
-
 async function updateSelectedAccount(authUser) {
   let username = Lang.queryJS('landing.selectedAccount.noAccountSelected');
-  const authAccounts = ConfigManager.getSelectedAccount()
+  const authAccounts = ConfigManager.getSelectedAccount();
+
   if (authUser != null) {
-    const acc = authAccounts
+    const acc = authAccounts;
+
     if (authUser.displayName != null) {
       username = authUser.displayName;
     }
 
-    if (authUser.uuid != null) {
-      try {
-        const base64modifier = await fetchSkinAndConvertToBase64(authUser.displayName);
-        if (base64modifier !== 'MHF_Question') {
-          document.getElementById('avatarContainer').style.backgroundImage = `urlurl('https://visage.surgeplay.com/face/256/${authUser.uuid}')`;
-        }
-      } catch (error) {
-        console.error('Error fetching or converting skin:', error);
+    try {
+      if (acc.type === 'mojang') {
+        document.getElementById('avatarContainer').style.backgroundImage = `url('https://visage.surgeplay.com/face/256/X-Steve')`;
+      } else if (acc.type === 'microsoft') {
+        document.getElementById('avatarContainer').style.backgroundImage = `url('https://visage.surgeplay.com/face/256/${authUser.uuid}')`;
       }
-    } if (acc.type === 'mojang') {
-        try {
-          const base64modifier = await fetchSkinAndConvertToBase64(authUser.displayName);
-          if (base64modifier !== 'MHF_Question') {
-            document.getElementById('avatarContainer').style.backgroundImage = `url('https://visage.surgeplay.com/face/256/${encodeURIComponent(base64modifier)}')`;
-          }
-        } catch (error) {
-          console.error('Error fetching or converting skin:', error);
-        }
-      } else { (acc.Type === 'microsoft')
-        document.getElementById('avatarContainer').style.backgroundImage = `url('https://visage.surgeplay.com/face/256/${authUser.uuid}')`
+    } catch (error) {
+      console.error('Error setting skin image:', error);
     }
   }
+
   user_text.innerHTML = username;
 }
 
