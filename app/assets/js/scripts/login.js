@@ -1,9 +1,6 @@
 /**
  * Script for login.ejs
  */
-// Validation Regexes.
-const validUsername         = /^[a-zA-Z0-9_]{1,16}$/
-const basicEmail            = /^\S+@\S+\.\S+$/
 
 // Login Elements
 const loginCancelContainer  = document.getElementById('loginCancelContainer')
@@ -48,7 +45,9 @@ function shakeError(element){
  * @param {string} value The email value.
  */
 function validateEmail(value) {
-    if (value.length >= 4) {
+    var usernameRegex = /^[a-zA-Z0-9_]{4,}$/;
+
+    if (usernameRegex.test(value)) {
         loginEmailError.style.opacity = 0;
         lu = true;
     } else {
@@ -58,7 +57,6 @@ function validateEmail(value) {
 
     checkLoginButtonEnabled(); 
 }
-
 
 function checkLoginButtonEnabled() {
     loginButton.disabled = !lu;
@@ -147,7 +145,6 @@ loginButton.addEventListener('click', () => {
         $('.checkmark').toggle();
         setTimeout(() => {
             switchView(VIEWS.login, loginViewOnSuccess, 500, 500, async () => {
-                // Temporary workaround
                 if(loginViewOnSuccess === VIEWS.settings){
                     await prepareSettings();
                 }
@@ -160,6 +157,8 @@ loginButton.addEventListener('click', () => {
                 loginLoading(false);
                 loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.success'), Lang.queryJS('login.login'));
                 formDisabled(false);
+                lu = false;
+                checkLoginButtonEnabled();
             });
         }, 1000);
     }).catch((displayableError) => {
@@ -179,9 +178,9 @@ loginButton.addEventListener('click', () => {
         setOverlayHandler(() => {
             formDisabled(false);
             toggleOverlay(false);
+            lu = false;
+            checkLoginButtonEnabled();
         });
         toggleOverlay(true);
     });
 });
-
-
